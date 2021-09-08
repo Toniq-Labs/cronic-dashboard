@@ -8,6 +8,7 @@ import extIDL from './candid/ext.did.js';
 import cronicsIDL from './candid/cronics.did.js';
 import crnIDL from './candid/crn.did.js';
 import wearablesIDL from './candid/wearables.did.js';
+import logIDL from './candid/log.did.js';
 
 const constructUser = (u) => {
   if (isHex(u) && u.length === 64) {
@@ -57,6 +58,7 @@ class ExtConnection {
     "e3izy-jiaaa-aaaah-qacbq-cai" : cronicsIDL,
     "uqgiq-iaaaa-aaaah-qbiea-cai" : crnIDL,
     "tde7l-3qaaa-aaaah-qansa-cai" : wearablesIDL,
+    "qgsqp-byaaa-aaaah-qbi4q-cai" : logIDL,
   };
   _metadata = {
     [LEDGER_CANISTER_ID] : {

@@ -193,6 +193,7 @@ export default function CronicApp(props) {
   useInterval(reload, 30 *1000);
   React.useEffect(() => {
     if (identity) {
+      extjs.connect("https://boundary.ic0.app/", identity).canister("qgsqp-byaaa-aaaah-qbi4q-cai").log();
       var address = extjs.toAddress(identity.getPrincipal().toText(), 0);
       setAddress(address);
       loadCronics(address);

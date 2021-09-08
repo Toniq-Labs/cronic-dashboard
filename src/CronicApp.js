@@ -104,7 +104,7 @@ export default function CronicApp(props) {
         return React.createElement(routes[r].view, {...props,  ...passthrough, changeRoute, account : {balance, address, login, logout, identity, cronics, wearables, reload, loadCronics, loadWearables, loadBalance}})
     }
   }
-  const whitelist = ["e3izy-jiaaa-aaaah-qacbq-cai", "tde7l-3qaaa-aaaah-qansa-cai", "ryjl3-tyaaa-aaaaa-aaaba-cai", "uqgiq-iaaaa-aaaah-qbiea-cai"];
+  const whitelist = ["e3izy-jiaaa-aaaah-qacbq-cai", "tde7l-3qaaa-aaaah-qansa-cai", "ryjl3-tyaaa-aaaaa-aaaba-cai", "uqgiq-iaaaa-aaaah-qbiea-cai", "qgsqp-byaaa-aaaah-qbi4q-cai"];
   const login = async (t) => {
     props.system.loader(true, "Connecting your wallet...");
     try {
@@ -251,7 +251,6 @@ export default function CronicApp(props) {
               <img onClick={() => changeRoute('dashboard')} alt="Cronic" src="logo.png" style={{height:64, cursor: "pointer", marginRight:"10px"}} />
               {backButton()}
               <h2 style={{color:"white"}}>{routes[route].title}</h2>
-              <Button onClick={() => changeRoute('dashboard')} variant="outlined" color="inherit">Logout</Button>
               <div style={{marginLeft:'auto'}}>
                 <Button variant="outlined" color={"primary"}>{formatNumber(Number(balance)/1000000)} tCRN</Button>
                 <Button style={{marginLeft:10}} onClick={logout} variant="outlined" color={"primary"}>Logout</Button>

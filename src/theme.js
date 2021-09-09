@@ -7,6 +7,7 @@ const theme = createTheme ({
     //fontFamily: "'Poppins', sans-serif",
   },
   palette: {
+    type : "dark",
     primary: {
       main: '#2bede6',
     },

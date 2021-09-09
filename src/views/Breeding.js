@@ -7,6 +7,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import extjs from '../ic/extjs.js';
 import Timestamp from 'react-timestamp';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import Image from '../components/Image';
 import CronicDetail from '../components/CronicDetail';
 import { makeStyles } from '@material-ui/core/styles';
@@ -62,14 +67,22 @@ const useStyles = makeStyles((theme) => ({
       width:"125px",
     }
   },
+  formControl: {
+    top:3,
+    marginLeft:20,
+    '& .MuiSelect-root' : {
+      paddingTop:5,
+      paddingBottom:5,
+    },
+  },
   sideDisplay: {
     position:"absolute",
     width:300,
     padding:5,
     textAlign: "center",
     zIndex :0,
-    top:0,
-    right:0,
+    top:130,
+    right:130,
     //backgroundColor: "#2bede617",
     //border: "1px solid #2bede6",
     backgroundRepeat: "no-repeat",
@@ -105,6 +118,8 @@ export default function Breeding(props) {
   const [parent1, setParent1] = React.useState(false);
   const [parent2, setParent2] = React.useState(false);
   const [display, setDisplay] = React.useState(0);
+  const [filterFertile, setFilterFertile] = React.useState(false);
+  const [filterGeneration, setFilterGeneration] = React.useState(false);
   const [sires, setSires] = React.useState([]);
   const loadSires = async () => {
     var s = await API.canister("e3izy-jiaaa-aaaah-qacbq-cai").sires();
@@ -157,10 +172,36 @@ export default function Breeding(props) {
     loadSires();
   }, []);
   return (
-  <div style={{position:"relative"}}>
+  <>
     <Grid container spacing={1}>
       <Grid item xs={8}>
-        <h2 className={classes.banner}>Breeding</h2>
+        <h2 className={classes.banner}>
+          Breeding
+          {display === 0 ?
+          <FormControl variant="filled" className={classes.formControl}>
+            <Select
+              value={filterFertile}
+              onChange={e => setFilterFertile(e.target.value)}
+            >
+              <MenuItem value={false}>Show All</MenuItem>
+              <MenuItem value={true}>Fertile Only</MenuItem>
+            </Select>
+          </FormControl> : "" }
+          <FormControl variant="filled" className={classes.formControl}>
+            <Select
+              value={filterGeneration}
+              onChange={e => setFilterGeneration(e.target.value)}
+            >
+              <MenuItem value={false}>All Gens</MenuItem>
+              <MenuItem value={0}>Gen0</MenuItem>
+              <MenuItem value={1}>Gen1</MenuItem>
+              <MenuItem value={2}>Gen2</MenuItem>
+              <MenuItem value={4}>Gen3</MenuItem>
+              <MenuItem value={5}>Gen4</MenuItem>
+              <MenuItem value={5}>Gen5</MenuItem>
+            </Select>
+          </FormControl>
+        </h2>
         <Tabs value={display} onChange={(e,v) => setDisplay(v)} className={classes.tabs}>
           <Tab value={0} label="My Cronics" />
           <Tab value={1} label="Sires" />
@@ -170,7 +211,11 @@ export default function Breeding(props) {
             <>
               {props.account.cronics.length === 0 ?
               <div style={{marginLeft:"20px", color:"white"}}>You don't have any Cronics</div>:
-              (props.account.cronics.map(cronic => {
+              (props.account.cronics.filter(cronic => {
+                if (filterFertile && cronic.breedData.canBreed === false) return false;
+                else if (filterGeneration !== false && cronic.breedData.generation !== filterGeneration) return false;
+                else return true;
+              }).map(cronic => {
                 return (<Grid key={cronic.id} item xs={3}>
                   <a onClick={() => setCronic(cronic)} className={classes.dashButton}>
                     <div><Image style={{position:"absolute", top:20, left:0, right:0}} size={110} src={"https://e3izy-jiaaa-aaaah-qacbq-cai.raw.ic0.app/?tokenid="+cronic.id} /></div>
@@ -179,7 +224,10 @@ export default function Breeding(props) {
               })) }
             </>: 
             <>
-              {sires.length === 0 ?
+              {sires.filter(cronic => {
+                if (filterGeneration !== false && cronic.breedData.generation !== filterGeneration) return false;
+                else return true;
+              }).length === 0 ?
               <div style={{marginLeft:"20px", color:"white"}}>There are no sires right now</div>:
               (sires.map(cronic => {
               return (<Grid key={cronic.index} item xs={3}>
@@ -216,7 +264,7 @@ export default function Breeding(props) {
                 : ""}
                 <Button fullWidth onClick={() => setCronic(false)} className={classes.button} variant="outlined" color={"primary"}>Back</Button> 
               </> : 
-              <span style={{color:"white", display:"block", fontWeight:"bold", color: "#2bede6", padding:8, marginTop:10}}>Can breed <Timestamp relative autoUpdate date={Number(cronic.breedData.breedTime[0]/1000000000n)} /></span>
+              <span style={{color:"white", display:"block", fontWeight:"bold", color: "#2bede6", padding:8, marginTop:10}}>Can breed <Timestamp relative autoUpdate date={Math.floor(Number(cronic.breedData.breedTime[0])/1000000000)} /></span>
               
             }
           </> :
@@ -266,6 +314,6 @@ export default function Breeding(props) {
       </>
       }
     </div>
-  </div>
+  </>
   );
 }

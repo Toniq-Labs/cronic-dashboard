@@ -244,7 +244,7 @@ export default function CronicApp(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <div style={{boxShadow: `0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%) !important`, width:"1200px", margin: "0 auto", height: "780px", border: "solid 1px #121920", marginTop : "20px",backgroundImage:"url('bg.png')", backgroundSize:"cover", backgroundColor:"#121920"}}>
+      <div style={{position: "relative",boxShadow: `0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%) !important`, width:"1200px", margin: "0 auto", height: "780px", border: "solid 1px #121920", marginTop : "20px",backgroundImage:"url('bg.png')", backgroundSize:"cover", backgroundColor:"#121920"}}>
         { route !== "login" ?
           <AppBar position="relative" style={{ border:"none", background: 'linear-gradient(#0d1114, #0e1519)', height: 90}}>
             <Toolbar style={{height:90}}>

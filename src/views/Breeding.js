@@ -196,8 +196,8 @@ export default function Breeding(props) {
               <MenuItem value={0}>Gen0</MenuItem>
               <MenuItem value={1}>Gen1</MenuItem>
               <MenuItem value={2}>Gen2</MenuItem>
-              <MenuItem value={4}>Gen3</MenuItem>
-              <MenuItem value={5}>Gen4</MenuItem>
+              <MenuItem value={3}>Gen3</MenuItem>
+              <MenuItem value={4}>Gen4</MenuItem>
               <MenuItem value={5}>Gen5</MenuItem>
             </Select>
           </FormControl>

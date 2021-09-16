@@ -177,7 +177,6 @@ export default function Breeding(props) {
       <Grid item xs={8}>
         <h2 className={classes.banner}>
           Breeding
-          {display === 0 ?
           <FormControl variant="filled" className={classes.formControl}>
             <Select
               value={filterFertile}
@@ -186,7 +185,7 @@ export default function Breeding(props) {
               <MenuItem value={false}>Show All</MenuItem>
               <MenuItem value={true}>Fertile Only</MenuItem>
             </Select>
-          </FormControl> : "" }
+          </FormControl>
           <FormControl variant="filled" className={classes.formControl}>
             <Select
               value={filterGeneration}
@@ -225,7 +224,8 @@ export default function Breeding(props) {
             </>: 
             <>
               {sires.filter(cronic => {
-                if (filterGeneration !== false && cronic.breedData.generation !== filterGeneration) return false;
+                if (filterFertile && cronic.breedData.canBreed === false) return false;
+                else if (filterGeneration !== false && cronic.breedData.generation !== filterGeneration) return false;
                 else return true;
               }).length === 0 ?
               <div style={{marginLeft:"20px", color:"white"}}>There are no sires right now</div>:

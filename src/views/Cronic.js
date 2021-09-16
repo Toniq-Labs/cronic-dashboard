@@ -224,9 +224,9 @@ export default function Cronic(props) {
         :
           <>
             <Button onClick={removeWearables} fullWidth className={classes.button} variant="outlined" color={"primary"}>Remove Wearables</Button>
-            <Button onClick={list} fullWidth className={classes.button} variant="outlined" color={"primary"}>List on Marketplace</Button> 
-              {cronic.breedData.canBreed ? 
-              <Button onClick={sire} fullWidth className={classes.button} variant="outlined" color={"primary"}>Sire Cronic</Button> : "" }
+            {cronic.breedData.canBreed ?
+            <Button onClick={list} fullWidth className={classes.button} variant="outlined" color={"primary"}>List on Marketplace</Button>  : "" }
+              <Button onClick={sire} fullWidth className={classes.button} variant="outlined" color={"primary"}>Sire Cronic</Button>
           </>
         )
       }

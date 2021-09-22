@@ -112,6 +112,25 @@ const API = extjs.connect("https://boundary.ic0.app/");
 const formatNumber = x => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+function useInterval(callback, delay) {
+  const savedCallback = React.useRef();
+
+  // Remember the latest callback.
+  React.useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  React.useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
 export default function Breeding(props) {
   const classes = useStyles();
   const [cronic, setCronic] = React.useState(false);
@@ -168,6 +187,8 @@ export default function Breeding(props) {
     setCronic(false);
   };
   const isMyCronic = cronic => props.account.cronics.find(c => c.id === cronic.id);
+  
+  useInterval(loadSires, 30 *1000);
   React.useEffect(() => {
     loadSires();
   }, []);
@@ -208,7 +229,11 @@ export default function Breeding(props) {
         <Grid container spacing={1}>
           {display === 0 ? 
             <>
-              {props.account.cronics.length === 0 ?
+              {props.account.cronics.filter(cronic => {
+                if (filterFertile && cronic.breedData.canBreed === false) return false;
+                else if (filterGeneration !== false && cronic.breedData.generation !== filterGeneration) return false;
+                else return true;
+              }).length === 0 ?
               <div style={{marginLeft:"20px", color:"white"}}>You don't have any Cronics</div>:
               (props.account.cronics.filter(cronic => {
                 if (filterFertile && cronic.breedData.canBreed === false) return false;
@@ -229,7 +254,11 @@ export default function Breeding(props) {
                 else return true;
               }).length === 0 ?
               <div style={{marginLeft:"20px", color:"white"}}>There are no sires right now</div>:
-              (sires.map(cronic => {
+              (sires.filter(cronic => {
+                if (filterFertile && cronic.breedData.canBreed === false) return false;
+                else if (filterGeneration !== false && cronic.breedData.generation !== filterGeneration) return false;
+                else return true;
+              }).map(cronic => {
               return (<Grid key={cronic.index} item xs={3}>
                 <a onClick={() => setCronic(cronic)} className={classes.dashButton}>
                   <div><Image style={{position:"absolute", top:20, left:0, right:0}} size={110} src={"https://e3izy-jiaaa-aaaah-qacbq-cai.raw.ic0.app/?tokenid="+cronic.id} /></div>

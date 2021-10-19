@@ -179,12 +179,13 @@ export default function Breeding(props) {
     console.log(c);
     var price = (BigInt(getPrice(c.saleTime)) * 100000000n);
     if (props.account.balance < ((BigInt(getPrice(c.saleTime)) * 100000000n) + 10000n)) return props.system.error("You have an insufficient balance to continue (don't foget to add 0.0001ICP fee)");
+    console.log(price);
     var v = await props.system.confirm("Buying Cronic", "Are you sure you want to buy this Cronic for " + formatNumber(getPrice(c.saleTime)) + " ICP?");
     if (v) {
       props.system.loader(true, "Reserving Cronic...");
       try {
         var api = extjs.connect("https://boundary.ic0.app/", props.account.identity);
-        var r = await api.canister("e3izy-jiaaa-aaaah-qacbq-cai").reserve(cronic.id, price, props.account.address, _getRandomBytes());
+        var r = await api.canister("e3izy-jiaaa-aaaah-qacbq-cai").reserve(c.id, price, props.account.address, _getRandomBytes());
         if (r.hasOwnProperty("err")) throw r.err;
         var paytoaddress = r.ok[0];
         var pricetopay = r.ok[1];

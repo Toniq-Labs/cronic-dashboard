@@ -301,11 +301,11 @@ export default function Breeding(props) {
           {Number(cronic.saleTime/1000000n) <= Date.now() ?
           <>
           <hr /><br /> 
-          <strong>Price will drop in <Timestamp relative autoUpdate date={getNexPriceDrop(cronic.saleTime)} /></strong><br />
+          <strong>Price will drop <Timestamp relative autoUpdate date={getNexPriceDrop(cronic.saleTime)} /></strong><br />
             <Button onClick={() => buy(cronic)} style={{marginTop:10, marginBottom: 15}} className={classes.button} variant="outlined" color={"primary"}>Buy @ {getPrice(cronic.saleTime)} ICP</Button></>: 
             <>
               <hr /><br /> 
-              <strong>Sale starts in <Timestamp relative autoUpdate date={Number(cronic.saleTime/1000000000n)} /></strong><br /> 
+              <strong>Sale starts <Timestamp relative autoUpdate date={Number(cronic.saleTime/1000000000n)} /></strong><br /> 
             </>}
         </>
         : <><p><strong>Please select a Cronic to view</strong></p></>

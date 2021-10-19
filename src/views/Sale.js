@@ -113,11 +113,11 @@ const formatNumber = x => {
 const getNexPriceDrop = t => {
   var p = getPrice(t);
   var pdiff = 24 - p + 1;
-  return Number(t/1000000000n) + (pdiff * 60);
+  return Number(t/1000000000n) + (pdiff * 180);
 };
 const getPrice = t => {
   var diff = Date.now() - Number(t/1000000n);
-  return Math.max(Math.min(24, 24 - Math.floor(diff/60000)), 5);
+  return Math.max(Math.min(24, 24 - Math.floor(diff/180000)), 5);
 };
 function useInterval(callback, delay) {
   const savedCallback = React.useRef();
@@ -176,6 +176,7 @@ export default function Breeding(props) {
     if (!found) setCronic(false);
   };
   const buy = async c => {
+    console.log(c);
     var price = (BigInt(getPrice(c.saleTime)) * 100000000n);
     if (props.account.balance < ((BigInt(getPrice(c.saleTime)) * 100000000n) + 10000n)) return props.system.error("You have an insufficient balance to continue (don't foget to add 0.0001ICP fee)");
     var v = await props.system.confirm("Buying Cronic", "Are you sure you want to buy this Cronic for " + formatNumber(getPrice(c.saleTime)) + " ICP?");
@@ -187,10 +188,10 @@ export default function Breeding(props) {
         if (r.hasOwnProperty("err")) throw r.err;
         var paytoaddress = r.ok[0];
         var pricetopay = r.ok[1];
-        props.loader(true, "Transferring ICP...");
+        props.system.loader(true, "Transferring ICP...");
         await api.token().transfer(props.account.identity.getPrincipal().toText(), 0, paytoaddress, pricetopay, 10000);
         var r3;
-        props.loader(true, "Completing purchase...");
+        props.system.loader(true, "Completing purchase...");
         await api.canister("e3izy-jiaaa-aaaah-qacbq-cai").retreive(paytoaddress);
         props.system.loader(true, "Reloading data...");
         await Promise.all([props.account.loadBalance(), props.account.loadCronics(), loadSalesStats()]);
@@ -282,13 +283,13 @@ export default function Breeding(props) {
                 return 0;
             }
           })
-          .map(cronic => {
-            return (<Grid style={{textAlign:"center"}} key={cronic.id} item md={3} sm={4} xs={6}>
-              <a className={classes.dashButton} onClick={() => setCronic(cronic)}>
-                <div><Image style={{position:"absolute", top:20, left:0, right:0}} size={110} src={"https://e3izy-jiaaa-aaaah-qacbq-cai.raw.ic0.app/?tokenid="+cronic.id} /></div>
+          .map(c => {
+            return (<Grid style={{textAlign:"center"}} key={c.id} item md={3} sm={4} xs={6}>
+              <a className={classes.dashButton} onClick={() => setCronic(c)}>
+                <div><Image style={{position:"absolute", top:20, left:0, right:0}} size={110} src={"https://e3izy-jiaaa-aaaah-qacbq-cai.raw.ic0.app/?tokenid="+c.id} /></div>
               </a>
-              {Number(cronic.saleTime/1000000n) <= Date.now() ?
-              <Button onClick={() => buy(cronic)} style={{marginTop:10, marginBottom: 15}} className={classes.button} variant="outlined" color={"primary"}>Buy @ {getPrice(cronic.saleTime)} ICP</Button> : "" } 
+              {Number(c.saleTime/1000000n) <= Date.now() ?
+              <Button onClick={() => buy(c)} style={{marginTop:10, marginBottom: 15}} className={classes.button} variant="outlined" color={"primary"}>Buy @ {getPrice(c.saleTime)} ICP</Button> : "" } 
             </Grid>);
           })}
         </Grid>

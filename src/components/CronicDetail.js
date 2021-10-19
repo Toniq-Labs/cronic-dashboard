@@ -80,8 +80,8 @@ const useStyles = makeStyles((theme) => ({
     padding:20,
     '& #listed' : {
       position: "absolute",
-      top:30,
-      left:20,
+      bottom:30,
+      right:20,
       color: "#2bede6"
     },
     '& #cantBreed' : {
@@ -105,9 +105,12 @@ export default function CronicDetail(props) {
   }, [props.cronic]);
   return (<>
     <div className={classes.imgContainer}>
+      <Grid style={{color:"white", fontWeight:"bold"}} container spacing={1}>
+        <Grid style={{textAlign:"left"}} item xs={6}>#{cronic.index + 1}</Grid>
+      </Grid>
       { cronic.listing ? <Tooltip title="This Cronic is listed on the marketplace"><StorefrontIcon id="listed" /></Tooltip> : "" }
       { cronic.sireFee  ? <Tooltip title="This Cronic is listed as a sire"><FavoriteBorderIcon id="listed" /></Tooltip> : "" }
-      <Image size={"180px"} id="selectedCronicImg" src={"https://e3izy-jiaaa-aaaah-qacbq-cai.raw.ic0.app/?tokenid="+cronic.id} />
+      <Image size={"250px"} id="selectedCronicImg" src={"https://e3izy-jiaaa-aaaah-qacbq-cai.raw.ic0.app/?tokenid="+cronic.id} />
       { cronic.breedData.canBreed === false ? <Tooltip title={"This Cronic needs time before it can breed..."}><TimerIcon id="cantBreed" /></Tooltip> : "" }
     </div>
     <Grid style={{color:"white", textAlign:"center"}} container spacing={1}>
@@ -120,10 +123,23 @@ export default function CronicDetail(props) {
       <Grid item xs={4}><strong>Base</strong><br />{genes.battle.base.dominant} ({genes.battle.base.recessive})</Grid>
       <Grid item xs={4}><strong>Speed</strong><br />{genes.battle.speed.dominant} ({genes.battle.speed.recessive})</Grid>
       <Grid item xs={4}><strong>Generation</strong><br />{cronic.breedData.generation}</Grid>
+    </Grid>
+    {cronic.hasOwnProperty("nftv") ?
+    <>
+      <br /><hr /><br />
+    <Grid style={{color:"white", textAlign:"center"}} container spacing={1}>
+      <Grid item xs={4}><strong>NRI %</strong><br />{cronic.nftv.nri.toFixed(1)}%</Grid>
+      <Grid item xs={4}><strong>Overall %</strong><br />{cronic.nftv.overall.toFixed(1)}%</Grid>
+      <Grid item xs={4}><strong>Warrior %</strong><br />{cronic.nftv.warrior.toFixed(1)}%</Grid>
+      <Grid item xs={4}><strong>Base High %</strong><br />{cronic.nftv.basehigh.toFixed(1)}%</Grid>
+      
+      <Grid item xs={4}><strong>Base Low</strong><br />{cronic.nftv.baselow.toFixed(1)}%</Grid>
+      <Grid item xs={4}><strong>Twin %</strong><br />{cronic.nftv.twin.toFixed(1)}%</Grid>
         {/*<Grid item xs={4}><strong>Battle Class</strong><br />TBD</Grid>
       <Grid item xs={4}><strong>Basic</strong><br />TBD</Grid>
         <Grid item xs={4}><strong>Special</strong><br />TBD</Grid>*/}
     </Grid>
+    </> : "" }
   </>);
 }
 

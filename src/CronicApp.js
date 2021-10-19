@@ -1,3 +1,4 @@
+/* global BigInt */
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,6 +15,7 @@ import Cronic from './views/Cronic';
 import Shop from './views/Shop';
 import Games from './views/Games';
 import Breeding from './views/Breeding';
+import Sale from './views/Sale';
 import {StoicIdentity} from "ic-stoic-identity";
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -63,10 +65,15 @@ const routes = {
     view : Breeding,
     back : 'dashboard',
   },
+  'sale' : {
+    title : "Sale",
+    view : Sale,
+    back : 'dashboard',
+  },
 };
 //Helpers
 const formatNumber = x => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "");
 };
 function useInterval(callback, delay) {
   const savedCallback = React.useRef();
@@ -115,7 +122,7 @@ export default function CronicApp(props) {
           if (id) {
             setIdentity(id);
             localStorage.setItem("_loginType", t);
-            changeRoute('dashboard');
+            changeRoute('sale');
           } else {
             throw "Failed to connect to your wallet";
           }
@@ -137,7 +144,7 @@ export default function CronicApp(props) {
       if (id) {
         setIdentity(id);
         localStorage.setItem("_loginType", t);
-        changeRoute('dashboard');
+        changeRoute('sale');
       } else {
         throw "Failed to login";
       };
@@ -175,7 +182,8 @@ export default function CronicApp(props) {
     await Promise.all([loadBalance(), loadCronics(), loadWearables()]);
   };
   const loadBalance = async (_address) => {
-    setBalance(await API.token("uqgiq-iaaaa-aaaah-qbiea-cai").getBalance(_address ?? address));
+    setBalance(await API.token().getBalance(_address ?? address));
+    //setBalance(await API.token("uqgiq-iaaaa-aaaah-qbiea-cai").getBalance(_address ?? address));
   };
   const loadCronics = async (_address) => {
     var cronics = await API.token("e3izy-jiaaa-aaaah-qacbq-cai").getTokens(_address ?? address);
@@ -210,7 +218,7 @@ export default function CronicApp(props) {
           StoicIdentity.load().then(id => {
             if (id !== false) {
               setIdentity(id);
-              changeRoute('dashboard');
+              changeRoute('sale');
               props.system.loader(false);
             } else {
               logout();
@@ -229,7 +237,7 @@ export default function CronicApp(props) {
               }
               var id = await window.ic.plug.agent._identity;
               setIdentity(id);
-              changeRoute('dashboard');
+              changeRoute('sale');
               props.system.loader(false);
             } else {
               logout();
@@ -244,7 +252,7 @@ export default function CronicApp(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <div style={{position: "relative",boxShadow: `0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%) !important`, width:"1200px", margin: "0 auto", height: "780px", border: "solid 1px #121920", marginTop : "20px",backgroundImage:"url('bg.png')", backgroundSize:"cover", backgroundColor:"#121920"}}>
+      <div style={{position: "relative",boxShadow: `0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%) !important`, width:"1200px", margin: "0 auto", border: "solid 1px #121920", marginTop : "20px",backgroundImage:"url('bg.png')", backgroundSize:"cover", backgroundColor:"#121920"}}>
         { route !== "login" ?
           <AppBar position="relative" style={{ border:"none", background: 'linear-gradient(#0d1114, #0e1519)', height: 90}}>
             <Toolbar style={{height:90}}>
@@ -252,7 +260,8 @@ export default function CronicApp(props) {
               {backButton()}
               <h2 style={{color:"white"}}>{routes[route].title}</h2>
               <div style={{marginLeft:'auto'}}>
-                <Button variant="outlined" color={"primary"}>{formatNumber(Number(balance)/1000000)} tCRN</Button>
+                {/*<Button variant="outlined" color={"primary"}>{formatNumber(Number(balance)/1000000)} tCRN</Button>*/}
+                <Button variant="outlined" color={"primary"}>{formatNumber(Number(balance)/100000000)} ICP</Button>
                 <Button style={{marginLeft:10}} onClick={logout} variant="outlined" color={"primary"}>Logout</Button>
               </div>
             </Toolbar>

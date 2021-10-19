@@ -75,15 +75,9 @@ export default function Dashboard(props) {
         </a>
       </Grid>
       <Grid item xs={2}>
-        <a className={classes.dashButton} onClick={faucet}>
-          <div><img src="icon/faucet.png" /></div>
-          <p>TCRN Faucet</p>
-        </a>
-      </Grid>
-      <Grid item xs={2}>
-        <a className={classes.dashButton} href="https://entrepot.app/#marketplace" target="_blank">
+        <a className={classes.dashButton} onClick={() => props.changeRoute('sale')}>
           <div><img src="icon/marketplace.png" /></div>
-          <p>Marketplace</p>
+          <p>Public Sale</p>
         </a>
       </Grid>
     </Grid>

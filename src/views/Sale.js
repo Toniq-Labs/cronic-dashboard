@@ -154,7 +154,9 @@ export default function Breeding(props) {
   const loadSalesStats = async () => {
     var s = await API.canister("e3izy-jiaaa-aaaah-qacbq-cai").salesStats();
     setUnsold(Number(s[2]));
+    var found = false;
     var cronics = s[1].map(el => {
+      if (cronic && cronic.index == el[0]) found = true;
       return {
         saleTime : el[1],
         listing : false,
@@ -171,7 +173,7 @@ export default function Breeding(props) {
       };
     });
     setCronics(cronics);
-    setCronic(cronics[0]);
+    if (!found) setCronic(false);
   };
   const buy = async c => {
     var price = (BigInt(getPrice(c.saleTime)) * 100000000n);
@@ -203,7 +205,7 @@ export default function Breeding(props) {
     };
   };
   
-  useInterval(loadSalesStats, 30 *1000);
+  useInterval(loadSalesStats, 5 *1000);
   React.useEffect(() => {
     loadSalesStats();
   }, []);
@@ -306,7 +308,7 @@ export default function Breeding(props) {
               <strong>Sale starts in <Timestamp relative autoUpdate date={Number(cronic.saleTime/1000000000n)} /></strong><br /> 
             </>}
         </>
-        : ""
+        : <><p><strong>Please select a Cronic to view</strong></p></>
       }<br />
     </div>
   </>
